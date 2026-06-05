@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TrackingRouteImport } from './routes/tracking'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as QuoteRouteImport } from './routes/quote'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -22,6 +23,11 @@ import { Route as TrackingIdRouteImport } from './routes/tracking.$id'
 const TrackingRoute = TrackingRouteImport.update({
   id: '/tracking',
   path: '/tracking',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesRoute = ServicesRouteImport.update({
@@ -73,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/quote': typeof QuoteRoute
   '/services': typeof ServicesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tracking': typeof TrackingRouteWithChildren
   '/tracking/$id': typeof TrackingIdRoute
 }
@@ -84,6 +91,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/quote': typeof QuoteRoute
   '/services': typeof ServicesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tracking': typeof TrackingRouteWithChildren
   '/tracking/$id': typeof TrackingIdRoute
 }
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/quote': typeof QuoteRoute
   '/services': typeof ServicesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tracking': typeof TrackingRouteWithChildren
   '/tracking/$id': typeof TrackingIdRoute
 }
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/quote'
     | '/services'
+    | '/sitemap.xml'
     | '/tracking'
     | '/tracking/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/quote'
     | '/services'
+    | '/sitemap.xml'
     | '/tracking'
     | '/tracking/$id'
   id:
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/quote'
     | '/services'
+    | '/sitemap.xml'
     | '/tracking'
     | '/tracking/$id'
   fileRoutesById: FileRoutesById
@@ -143,6 +155,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   QuoteRoute: typeof QuoteRoute
   ServicesRoute: typeof ServicesRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TrackingRoute: typeof TrackingRouteWithChildren
 }
 
@@ -153,6 +166,13 @@ declare module '@tanstack/react-router' {
       path: '/tracking'
       fullPath: '/tracking'
       preLoaderRoute: typeof TrackingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -234,8 +254,19 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   QuoteRoute: QuoteRoute,
   ServicesRoute: ServicesRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   TrackingRoute: TrackingRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
