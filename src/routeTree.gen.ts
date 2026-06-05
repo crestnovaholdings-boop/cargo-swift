@@ -18,7 +18,9 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as TrackingIdRouteImport } from './routes/tracking.$id'
+import { Route as AdminShipmentsRouteImport } from './routes/admin.shipments'
 
 const TrackingRoute = TrackingRouteImport.update({
   id: '/tracking',
@@ -65,48 +67,63 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const TrackingIdRoute = TrackingIdRouteImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => TrackingRoute,
 } as any)
+const AdminShipmentsRoute = AdminShipmentsRouteImport.update({
+  id: '/shipments',
+  path: '/shipments',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/quote': typeof QuoteRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tracking': typeof TrackingRouteWithChildren
+  '/admin/shipments': typeof AdminShipmentsRoute
   '/tracking/$id': typeof TrackingIdRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/quote': typeof QuoteRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tracking': typeof TrackingRouteWithChildren
+  '/admin/shipments': typeof AdminShipmentsRoute
   '/tracking/$id': typeof TrackingIdRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/quote': typeof QuoteRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tracking': typeof TrackingRouteWithChildren
+  '/admin/shipments': typeof AdminShipmentsRoute
   '/tracking/$id': typeof TrackingIdRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -120,19 +137,22 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/tracking'
+    | '/admin/shipments'
     | '/tracking/$id'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
-    | '/admin'
     | '/auth'
     | '/contact'
     | '/quote'
     | '/services'
     | '/sitemap.xml'
     | '/tracking'
+    | '/admin/shipments'
     | '/tracking/$id'
+    | '/admin'
   id:
     | '__root__'
     | '/'
@@ -144,13 +164,15 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/tracking'
+    | '/admin/shipments'
     | '/tracking/$id'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
   QuoteRoute: typeof QuoteRoute
@@ -224,6 +246,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/tracking/$id': {
       id: '/tracking/$id'
       path: '/$id'
@@ -231,8 +260,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrackingIdRouteImport
       parentRoute: typeof TrackingRoute
     }
+    '/admin/shipments': {
+      id: '/admin/shipments'
+      path: '/shipments'
+      fullPath: '/admin/shipments'
+      preLoaderRoute: typeof AdminShipmentsRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminShipmentsRoute: typeof AdminShipmentsRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminShipmentsRoute: AdminShipmentsRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface TrackingRouteChildren {
   TrackingIdRoute: typeof TrackingIdRoute
@@ -249,7 +297,7 @@ const TrackingRouteWithChildren = TrackingRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
   QuoteRoute: QuoteRoute,
@@ -260,3 +308,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
