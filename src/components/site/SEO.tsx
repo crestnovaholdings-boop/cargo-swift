@@ -1,12 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { BRAND } from "@/lib/brand";
 
-type Props = {
-  title: string;
-  description?: string;
-  path?: string;
-  image?: string;
-};
+type Props = { title: string; description?: string; path?: string; image?: string };
 
 export function SEO({ title, description, path = "/", image }: Props) {
   const fullTitle = `${title} | ${BRAND.name}`;
@@ -20,7 +15,7 @@ export function SEO({ title, description, path = "/", image }: Props) {
       <meta property="og:description" content={desc} />
       <meta property="og:type" content="website" />
       <meta property="og:url" content={path} />
-      {image && <meta property="og:image" content={image} />}
+      {image ? <meta property="og:image" content={image} /> : null}
       <meta name="twitter:card" content={image ? "summary_large_image" : "summary"} />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={desc} />
