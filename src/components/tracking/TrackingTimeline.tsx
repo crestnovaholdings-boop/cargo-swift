@@ -10,7 +10,15 @@ const ICONS: Record<ShipmentStatus, typeof Check> = {
   exception: AlertTriangle,
 };
 
-export type Evt = { id: string; status: ShipmentStatus; location: string | null; note: string | null; occurred_at: string };
+export type Evt = {
+  id: string;
+  status: ShipmentStatus;
+  location: string | null;
+  note: string | null;
+  occurred_at: string;
+  lat?: number | null;
+  lng?: number | null;
+};
 
 export function TrackingTimeline({ events, currentStatus }: { events: Evt[]; currentStatus: ShipmentStatus }) {
   return (
