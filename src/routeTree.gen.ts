@@ -20,7 +20,11 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as TrackingIdRouteImport } from './routes/tracking.$id'
+import { Route as AdminSubscribersRouteImport } from './routes/admin.subscribers'
 import { Route as AdminShipmentsRouteImport } from './routes/admin.shipments'
+import { Route as AdminQuotesRouteImport } from './routes/admin.quotes'
+import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
+import { Route as AdminInvoicesRouteImport } from './routes/admin.invoices'
 
 const TrackingRoute = TrackingRouteImport.update({
   id: '/tracking',
@@ -77,9 +81,29 @@ const TrackingIdRoute = TrackingIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => TrackingRoute,
 } as any)
+const AdminSubscribersRoute = AdminSubscribersRouteImport.update({
+  id: '/subscribers',
+  path: '/subscribers',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminShipmentsRoute = AdminShipmentsRouteImport.update({
   id: '/shipments',
   path: '/shipments',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminQuotesRoute = AdminQuotesRouteImport.update({
+  id: '/quotes',
+  path: '/quotes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMessagesRoute = AdminMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminInvoicesRoute = AdminInvoicesRouteImport.update({
+  id: '/invoices',
+  path: '/invoices',
   getParentRoute: () => AdminRoute,
 } as any)
 
@@ -93,7 +117,11 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tracking': typeof TrackingRouteWithChildren
+  '/admin/invoices': typeof AdminInvoicesRoute
+  '/admin/messages': typeof AdminMessagesRoute
+  '/admin/quotes': typeof AdminQuotesRoute
   '/admin/shipments': typeof AdminShipmentsRoute
+  '/admin/subscribers': typeof AdminSubscribersRoute
   '/tracking/$id': typeof TrackingIdRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -106,7 +134,11 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tracking': typeof TrackingRouteWithChildren
+  '/admin/invoices': typeof AdminInvoicesRoute
+  '/admin/messages': typeof AdminMessagesRoute
+  '/admin/quotes': typeof AdminQuotesRoute
   '/admin/shipments': typeof AdminShipmentsRoute
+  '/admin/subscribers': typeof AdminSubscribersRoute
   '/tracking/$id': typeof TrackingIdRoute
   '/admin': typeof AdminIndexRoute
 }
@@ -121,7 +153,11 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tracking': typeof TrackingRouteWithChildren
+  '/admin/invoices': typeof AdminInvoicesRoute
+  '/admin/messages': typeof AdminMessagesRoute
+  '/admin/quotes': typeof AdminQuotesRoute
   '/admin/shipments': typeof AdminShipmentsRoute
+  '/admin/subscribers': typeof AdminSubscribersRoute
   '/tracking/$id': typeof TrackingIdRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -137,7 +173,11 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/tracking'
+    | '/admin/invoices'
+    | '/admin/messages'
+    | '/admin/quotes'
     | '/admin/shipments'
+    | '/admin/subscribers'
     | '/tracking/$id'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -150,7 +190,11 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/tracking'
+    | '/admin/invoices'
+    | '/admin/messages'
+    | '/admin/quotes'
     | '/admin/shipments'
+    | '/admin/subscribers'
     | '/tracking/$id'
     | '/admin'
   id:
@@ -164,7 +208,11 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/tracking'
+    | '/admin/invoices'
+    | '/admin/messages'
+    | '/admin/quotes'
     | '/admin/shipments'
+    | '/admin/subscribers'
     | '/tracking/$id'
     | '/admin/'
   fileRoutesById: FileRoutesById
@@ -260,6 +308,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrackingIdRouteImport
       parentRoute: typeof TrackingRoute
     }
+    '/admin/subscribers': {
+      id: '/admin/subscribers'
+      path: '/subscribers'
+      fullPath: '/admin/subscribers'
+      preLoaderRoute: typeof AdminSubscribersRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/shipments': {
       id: '/admin/shipments'
       path: '/shipments'
@@ -267,16 +322,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminShipmentsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/quotes': {
+      id: '/admin/quotes'
+      path: '/quotes'
+      fullPath: '/admin/quotes'
+      preLoaderRoute: typeof AdminQuotesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/messages': {
+      id: '/admin/messages'
+      path: '/messages'
+      fullPath: '/admin/messages'
+      preLoaderRoute: typeof AdminMessagesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/invoices': {
+      id: '/admin/invoices'
+      path: '/invoices'
+      fullPath: '/admin/invoices'
+      preLoaderRoute: typeof AdminInvoicesRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminInvoicesRoute: typeof AdminInvoicesRoute
+  AdminMessagesRoute: typeof AdminMessagesRoute
+  AdminQuotesRoute: typeof AdminQuotesRoute
   AdminShipmentsRoute: typeof AdminShipmentsRoute
+  AdminSubscribersRoute: typeof AdminSubscribersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminInvoicesRoute: AdminInvoicesRoute,
+  AdminMessagesRoute: AdminMessagesRoute,
+  AdminQuotesRoute: AdminQuotesRoute,
   AdminShipmentsRoute: AdminShipmentsRoute,
+  AdminSubscribersRoute: AdminSubscribersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
