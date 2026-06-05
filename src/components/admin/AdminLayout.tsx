@@ -3,8 +3,9 @@ import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-hooks";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import {
-  Package, Inbox, Mail, Users, FileText, LogOut, LayoutDashboard, Search, Command,
+  Package, Inbox, Mail, Users, FileText, LogOut, LayoutDashboard, Search, Command, Menu,
 } from "lucide-react";
 import { BRAND } from "@/lib/brand";
 import { CommandPalette } from "./CommandPalette";
