@@ -50,7 +50,7 @@ function TrackingPage() {
   return (
     <SiteLayout>
       <SEO title="Track Shipment" description="Track your Worldwide Cargo Transit shipment in real time." path="/tracking" />
-      <PageHero eyebrow="Tracking" title="Track your shipment" subtitle="Enter your tracking number — try TLD82931, TLD10042, TLD55501 or TLD77820." />
+      <PageHero eyebrow="Tracking" title="Track your shipment" subtitle="Enter your tracking number" />
 
       <section className="mx-auto max-w-5xl px-4 py-10 lg:px-8">
         <form onSubmit={onSubmit} className="flex flex-wrap gap-3 rounded-2xl bg-card p-4 shadow-elevated">

@@ -35,5 +35,5 @@ export const STATUS_CLASS: Record<ShipmentStatus, string> = {
 
 export function generateTrackingNumber() {
   const n = Math.floor(10000 + Math.random() * 89999);
-  return `TLD${n}`;
+  return `WWCT${n}`;
 }
