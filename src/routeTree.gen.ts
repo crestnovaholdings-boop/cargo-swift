@@ -18,7 +18,13 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as TrackingIdRouteImport } from './routes/tracking.$id'
+import { Route as AdminSubscribersRouteImport } from './routes/admin.subscribers'
+import { Route as AdminShipmentsRouteImport } from './routes/admin.shipments'
+import { Route as AdminQuotesRouteImport } from './routes/admin.quotes'
+import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
+import { Route as AdminInvoicesRouteImport } from './routes/admin.invoices'
 
 const TrackingRoute = TrackingRouteImport.update({
   id: '/tracking',
@@ -65,48 +71,95 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const TrackingIdRoute = TrackingIdRouteImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => TrackingRoute,
 } as any)
+const AdminSubscribersRoute = AdminSubscribersRouteImport.update({
+  id: '/subscribers',
+  path: '/subscribers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminShipmentsRoute = AdminShipmentsRouteImport.update({
+  id: '/shipments',
+  path: '/shipments',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminQuotesRoute = AdminQuotesRouteImport.update({
+  id: '/quotes',
+  path: '/quotes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMessagesRoute = AdminMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminInvoicesRoute = AdminInvoicesRouteImport.update({
+  id: '/invoices',
+  path: '/invoices',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/quote': typeof QuoteRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tracking': typeof TrackingRouteWithChildren
+  '/admin/invoices': typeof AdminInvoicesRoute
+  '/admin/messages': typeof AdminMessagesRoute
+  '/admin/quotes': typeof AdminQuotesRoute
+  '/admin/shipments': typeof AdminShipmentsRoute
+  '/admin/subscribers': typeof AdminSubscribersRoute
   '/tracking/$id': typeof TrackingIdRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/quote': typeof QuoteRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tracking': typeof TrackingRouteWithChildren
+  '/admin/invoices': typeof AdminInvoicesRoute
+  '/admin/messages': typeof AdminMessagesRoute
+  '/admin/quotes': typeof AdminQuotesRoute
+  '/admin/shipments': typeof AdminShipmentsRoute
+  '/admin/subscribers': typeof AdminSubscribersRoute
   '/tracking/$id': typeof TrackingIdRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/quote': typeof QuoteRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tracking': typeof TrackingRouteWithChildren
+  '/admin/invoices': typeof AdminInvoicesRoute
+  '/admin/messages': typeof AdminMessagesRoute
+  '/admin/quotes': typeof AdminQuotesRoute
+  '/admin/shipments': typeof AdminShipmentsRoute
+  '/admin/subscribers': typeof AdminSubscribersRoute
   '/tracking/$id': typeof TrackingIdRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -120,19 +173,30 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/tracking'
+    | '/admin/invoices'
+    | '/admin/messages'
+    | '/admin/quotes'
+    | '/admin/shipments'
+    | '/admin/subscribers'
     | '/tracking/$id'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
-    | '/admin'
     | '/auth'
     | '/contact'
     | '/quote'
     | '/services'
     | '/sitemap.xml'
     | '/tracking'
+    | '/admin/invoices'
+    | '/admin/messages'
+    | '/admin/quotes'
+    | '/admin/shipments'
+    | '/admin/subscribers'
     | '/tracking/$id'
+    | '/admin'
   id:
     | '__root__'
     | '/'
@@ -144,13 +208,19 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/tracking'
+    | '/admin/invoices'
+    | '/admin/messages'
+    | '/admin/quotes'
+    | '/admin/shipments'
+    | '/admin/subscribers'
     | '/tracking/$id'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
   QuoteRoute: typeof QuoteRoute
@@ -224,6 +294,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/tracking/$id': {
       id: '/tracking/$id'
       path: '/$id'
@@ -231,8 +308,63 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrackingIdRouteImport
       parentRoute: typeof TrackingRoute
     }
+    '/admin/subscribers': {
+      id: '/admin/subscribers'
+      path: '/subscribers'
+      fullPath: '/admin/subscribers'
+      preLoaderRoute: typeof AdminSubscribersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/shipments': {
+      id: '/admin/shipments'
+      path: '/shipments'
+      fullPath: '/admin/shipments'
+      preLoaderRoute: typeof AdminShipmentsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/quotes': {
+      id: '/admin/quotes'
+      path: '/quotes'
+      fullPath: '/admin/quotes'
+      preLoaderRoute: typeof AdminQuotesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/messages': {
+      id: '/admin/messages'
+      path: '/messages'
+      fullPath: '/admin/messages'
+      preLoaderRoute: typeof AdminMessagesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/invoices': {
+      id: '/admin/invoices'
+      path: '/invoices'
+      fullPath: '/admin/invoices'
+      preLoaderRoute: typeof AdminInvoicesRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminInvoicesRoute: typeof AdminInvoicesRoute
+  AdminMessagesRoute: typeof AdminMessagesRoute
+  AdminQuotesRoute: typeof AdminQuotesRoute
+  AdminShipmentsRoute: typeof AdminShipmentsRoute
+  AdminSubscribersRoute: typeof AdminSubscribersRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminInvoicesRoute: AdminInvoicesRoute,
+  AdminMessagesRoute: AdminMessagesRoute,
+  AdminQuotesRoute: AdminQuotesRoute,
+  AdminShipmentsRoute: AdminShipmentsRoute,
+  AdminSubscribersRoute: AdminSubscribersRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface TrackingRouteChildren {
   TrackingIdRoute: typeof TrackingIdRoute
@@ -249,7 +381,7 @@ const TrackingRouteWithChildren = TrackingRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
   QuoteRoute: QuoteRoute,
