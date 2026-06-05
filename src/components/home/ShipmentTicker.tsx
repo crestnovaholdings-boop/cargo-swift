@@ -1,10 +1,10 @@
 const ITEMS = [
-  "Shipment TLD82931 in transit · Las Vegas, NV",
-  "TLD55501 delivered · Oxford St, London",
-  "TLD10042 cleared customs · Jebel Ali, Dubai",
-  "TLD77820 picked up · Toronto, Canada",
+  "Shipment WWCT82931 in transit · Las Vegas, NV",
+  "WWCT55501 delivered · Oxford St, London",
+  "WWCT10042 cleared customs · Jebel Ali, Dubai",
+  "WWCT77820 picked up · Toronto, Canada",
   "New route opened: Singapore → Rotterdam",
-  "TLD30019 boarded vessel · Hamburg Port",
+  "WWCT30019 boarded vessel · Hamburg Port",
   "Air freight capacity available · HKG → JFK",
 ];
 

@@ -78,7 +78,7 @@ export function Hero() {
               <Input
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                placeholder="Enter tracking number e.g. TLD82931"
+                placeholder="Enter tracking number e.g. WWCT82931"
                 className="border-0 bg-transparent pl-9 text-foreground placeholder:text-muted-foreground focus-visible:ring-0"
               />
             </div>
@@ -97,7 +97,7 @@ export function Hero() {
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-xs uppercase tracking-wider text-muted-foreground">Live Shipment</div>
-                <div className="mt-1 font-display text-2xl font-bold text-foreground">TLD82931</div>
+                <div className="mt-1 font-display text-2xl font-bold text-foreground">WWCT82931</div>
               </div>
               <span className="rounded-full status-in_transit px-3 py-1 text-xs font-semibold">In Transit</span>
             </div>
