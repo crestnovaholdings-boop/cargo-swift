@@ -16,6 +16,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TrackingIdRouteImport } from './routes/tracking.$id'
 
 const TrackingRoute = TrackingRouteImport.update({
   id: '/tracking',
@@ -52,6 +53,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TrackingIdRoute = TrackingIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => TrackingRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,7 +66,8 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/quote': typeof QuoteRoute
   '/services': typeof ServicesRoute
-  '/tracking': typeof TrackingRoute
+  '/tracking': typeof TrackingRouteWithChildren
+  '/tracking/$id': typeof TrackingIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -69,7 +76,8 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/quote': typeof QuoteRoute
   '/services': typeof ServicesRoute
-  '/tracking': typeof TrackingRoute
+  '/tracking': typeof TrackingRouteWithChildren
+  '/tracking/$id': typeof TrackingIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -79,7 +87,8 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/quote': typeof QuoteRoute
   '/services': typeof ServicesRoute
-  '/tracking': typeof TrackingRoute
+  '/tracking': typeof TrackingRouteWithChildren
+  '/tracking/$id': typeof TrackingIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
     | '/quote'
     | '/services'
     | '/tracking'
+    | '/tracking/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/quote'
     | '/services'
     | '/tracking'
+    | '/tracking/$id'
   id:
     | '__root__'
     | '/'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/quote'
     | '/services'
     | '/tracking'
+    | '/tracking/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -118,7 +130,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   QuoteRoute: typeof QuoteRoute
   ServicesRoute: typeof ServicesRoute
-  TrackingRoute: typeof TrackingRoute
+  TrackingRoute: typeof TrackingRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -172,8 +184,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tracking/$id': {
+      id: '/tracking/$id'
+      path: '/$id'
+      fullPath: '/tracking/$id'
+      preLoaderRoute: typeof TrackingIdRouteImport
+      parentRoute: typeof TrackingRoute
+    }
   }
 }
+
+interface TrackingRouteChildren {
+  TrackingIdRoute: typeof TrackingIdRoute
+}
+
+const TrackingRouteChildren: TrackingRouteChildren = {
+  TrackingIdRoute: TrackingIdRoute,
+}
+
+const TrackingRouteWithChildren = TrackingRoute._addFileChildren(
+  TrackingRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -182,7 +213,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   QuoteRoute: QuoteRoute,
   ServicesRoute: ServicesRoute,
-  TrackingRoute: TrackingRoute,
+  TrackingRoute: TrackingRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
