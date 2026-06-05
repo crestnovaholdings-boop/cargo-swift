@@ -7,7 +7,7 @@ export const BRAND = {
   phone: "+1 (800) 555-0142",
   phoneLink: "tel:+18005550142",
   whatsapp: "18005550142",
-  address: "1200 Logistics Way, Wilmington, DE 19801, USA",
+  address: "United States",
 } as const;
 
 export type ShipmentStatus =
