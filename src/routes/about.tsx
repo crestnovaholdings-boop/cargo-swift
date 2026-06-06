@@ -19,10 +19,10 @@ const TIMELINE = [
 ];
 
 const TEAM = [
-  { name: "Elena Marsh", role: "CEO & Co-Founder", img: "https://i.pravatar.cc/240?img=47" },
-  { name: "Daniel Kim", role: "COO & Co-Founder", img: "https://i.pravatar.cc/240?img=12" },
-  { name: "Priya Nair", role: "VP Customs & Compliance", img: "https://i.pravatar.cc/240?img=45" },
-  { name: "Marcus Hale", role: "CTO", img: "https://i.pravatar.cc/240?img=33" },
+  { name: "Elena Marsh", role: "CEO & Co-Founder", img: "https://t4.ftcdn.net/jpg/09/69/34/27/360_F_969342778_BCPcWUTyPG7RsXUUPaJ2jDNiiCzrtyOd.jpg" },
+  { name: "Daniel Kim", role: "COO & Co-Founder", img: "https://t4.ftcdn.net/jpg/05/45/89/41/360_F_545894172_fLINXPGJs19SgFvA3P6vTvXN59iScZJ0.jpg" },
+  { name: "Priya Nair", role: "VP Customs & Compliance", img: "https://t3.ftcdn.net/jpg/05/17/54/28/360_F_517542860_S6JeujV9a7G8bhje5qIyfYNCNBvowUeS.jpg" },
+  { name: "Marcus Hale", role: "CTO", img: "https://static.vecteezy.com/system/resources/thumbnails/072/597/015/small/confident-businessman-in-suit-stands-with-arms-crossed-showcasing-professionalism-in-bright-modern-office-environment-photo.jpeg" },
 ];
 
 function About() {
