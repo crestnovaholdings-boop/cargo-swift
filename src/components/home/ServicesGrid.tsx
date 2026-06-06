@@ -2,10 +2,10 @@ import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, Plane, Ship, Truck, Warehouse, ClipboardList } from "lucide-react";
 
 const SERVICES = [
-  { icon: ClipboardList, title: "Freight Dispatch", desc: "24/7 carrier dispatching with smart load matching across North America." , img:"https://images.unsplash.com/photo-1568438350562-2cae6d394ad0?auto=format&fit=crop&w=1200&q=80"},
+  { icon: ClipboardList, title: "Freight Dispatch", desc: "24/7 carrier dispatching with smart load matching across North America." , img:"https://thejunctionllc.com/wp-content/uploads/2026/01/The-Junction_image-1-430x290.jpg"},
   { icon: Truck, title: "Trucking & FTL/LTL", desc: "Dry van, reefer, flatbed — full and partial truckloads with live ETAs.", img:"https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1200&q=80" },
-  { icon: Plane, title: "Air Freight", desc: "Time-critical air freight to 200+ countries, including charters.", img:"https://images.unsplash.com/photo-1530521954074-e64f6810b32d?auto=format&fit=crop&w=1200&q=80" },
-  { icon: Ship, title: "Ocean Freight", desc: "FCL & LCL, port-to-port and door-to-door, on every major lane.", img:"https://images.unsplash.com/photo-1577563908411-5077b6dc7624?auto=format&fit=crop&w=1200&q=80" },
+  { icon: Plane, title: "Air Freight", desc: "Time-critical air freight to 200+ countries, including charters.", img:"https://www.up.com/content/dam/upcom/corp-comm/images/stock-images/planes-pros-cons.jpg" },
+  { icon: Ship, title: "Ocean Freight", desc: "FCL & LCL, port-to-port and door-to-door, on every major lane.", img:"https://www.savinodelbene.com/wp-content/uploads/2023/10/ocean-freight-shipping.png" },
   { icon: Warehouse, title: "Warehousing & 3PL", desc: "Bonded warehouses, fulfillment, pick-pack-ship, returns.", img:"https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1200&q=80" },
 ];
 
