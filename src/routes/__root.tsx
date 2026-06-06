@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/sonner";
 import { ScrollToTop } from "@/components/site/ScrollToTop";
+import { TawkToChat } from "@/components/site/TawkToChat";
 
 function NotFoundComponent() {
   return (
