@@ -129,6 +129,7 @@ function RootComponent() {
         <ScrollToTop />
         <Outlet />
         <Toaster richColors closeButton position="top-right" />
+        <TawkToChat />
       </HelmetProvider>
     </QueryClientProvider>
   );
