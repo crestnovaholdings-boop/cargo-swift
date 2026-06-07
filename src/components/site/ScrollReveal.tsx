@@ -65,14 +65,20 @@ export function ScrollReveal() {
 
     const run = () => {
       const targets = assign();
-      targets.forEach((el) => {
-        // If already in viewport on mount, reveal immediately for hero etc.
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.9 && rect.bottom > 0) {
-          el.classList.add("is-visible");
-        } else {
-          observer.observe(el);
-        }
+      // Force a reflow so the initial hidden state paints before we toggle
+      // `is-visible`. Without this, mobile browsers (and fast desktop loads)
+      // skip the transition because the element is added and revealed in the
+      // same frame.
+      void document.body.offsetHeight;
+      requestAnimationFrame(() => {
+        targets.forEach((el) => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+            el.classList.add("is-visible");
+          } else {
+            observer.observe(el);
+          }
+        });
       });
     };
 
