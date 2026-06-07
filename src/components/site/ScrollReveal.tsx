@@ -60,19 +60,28 @@ export function ScrollReveal() {
           }
         });
       },
-      { threshold: 0.12, rootMargin: "0px 0px -60px 0px" },
+      // Use threshold 0 with a negative bottom rootMargin so tall sections
+      // (common on mobile, where a section can be much taller than the
+      // viewport) still trigger as soon as their top edge crosses into view.
+      { threshold: 0, rootMargin: "0px 0px -10% 0px" },
     );
 
     const run = () => {
       const targets = assign();
-      targets.forEach((el) => {
-        // If already in viewport on mount, reveal immediately for hero etc.
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.9 && rect.bottom > 0) {
-          el.classList.add("is-visible");
-        } else {
-          observer.observe(el);
-        }
+      // Force a reflow so the initial hidden state paints before we toggle
+      // `is-visible`. Without this, mobile browsers (and fast desktop loads)
+      // skip the transition because the element is added and revealed in the
+      // same frame.
+      void document.body.offsetHeight;
+      requestAnimationFrame(() => {
+        targets.forEach((el) => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+            el.classList.add("is-visible");
+          } else {
+            observer.observe(el);
+          }
+        });
       });
     };
 
