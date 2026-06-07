@@ -4,9 +4,8 @@ export const BRAND = {
   tagline: "Global Logistics. Delivered with Precision.",
   domain: "worldwidecargotransit.com",
   email: "info@worldwidecargotransit.com",
-  phone: "+1 (800) 555-0142",
-  phoneLink: "tel:+18005550142",
-  whatsapp: "18005550142",
+  phone: "+202-968-9946",
+  phoneLink: "tel:+12029689946",
   address: "United States",
 } as const;
 
