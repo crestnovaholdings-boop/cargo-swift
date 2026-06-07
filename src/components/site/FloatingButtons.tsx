@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowUp, MessageCircle } from "lucide-react";
+import { ArrowUp, Phone } from "lucide-react";
 import { BRAND } from "@/lib/brand";
 
 export function FloatingButtons() {
@@ -22,14 +22,12 @@ export function FloatingButtons() {
         </button>
       ) : null}
       <a
-        href={`https://wa.me/${BRAND.whatsapp}`}
-        target="_blank"
-        rel="noreferrer"
-        aria-label="Chat on WhatsApp"
-        className="relative grid h-14 w-14 place-items-center rounded-full bg-success text-success-foreground shadow-elevated transition hover:scale-105"
+        href={BRAND.phoneLink}
+        aria-label="Call or text us"
+        className="relative grid h-14 w-14 place-items-center rounded-full bg-accent text-accent-foreground shadow-elevated transition hover:scale-105"
       >
-        <span className="absolute inset-0 animate-pulse-soft rounded-full bg-success/40" aria-hidden />
-        <MessageCircle className="relative h-6 w-6" />
+        <span className="absolute inset-0 animate-pulse-soft rounded-full bg-accent/40" aria-hidden />
+        <Phone className="relative h-6 w-6" />
       </a>
     </div>
   );
