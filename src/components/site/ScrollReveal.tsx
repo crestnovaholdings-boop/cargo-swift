@@ -60,7 +60,10 @@ export function ScrollReveal() {
           }
         });
       },
-      { threshold: 0.12, rootMargin: "0px 0px -60px 0px" },
+      // Use threshold 0 with a negative bottom rootMargin so tall sections
+      // (common on mobile, where a section can be much taller than the
+      // viewport) still trigger as soon as their top edge crosses into view.
+      { threshold: 0, rootMargin: "0px 0px -10% 0px" },
     );
 
     const run = () => {
