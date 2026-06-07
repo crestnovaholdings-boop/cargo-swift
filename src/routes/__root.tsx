@@ -15,6 +15,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/sonner";
 import { ScrollToTop } from "@/components/site/ScrollToTop";
 import { TawkToChat } from "@/components/site/TawkToChat";
+import { ScrollReveal } from "@/components/site/ScrollReveal";
 
 function NotFoundComponent() {
   return (
@@ -127,6 +128,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <HelmetProvider>
         <ScrollToTop />
+        <ScrollReveal />
         <Outlet />
         <Toaster richColors closeButton position="top-right" />
         <TawkToChat />
