@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import {
-  Package, Inbox, Mail, Users, FileText, LogOut, LayoutDashboard, Search, Command, Menu,
+  Package, Inbox, Mail, Users, FileText, LogOut, LayoutDashboard, Search, Command, Menu, Send,
 } from "lucide-react";
 import { BRAND } from "@/lib/brand";
 import { CommandPalette } from "./CommandPalette";
@@ -13,6 +13,7 @@ import { CommandPalette } from "./CommandPalette";
 const NAV = [
   { to: "/admin", label: "Overview", icon: LayoutDashboard },
   { to: "/admin/shipments", label: "Shipments", icon: Package },
+  { to: "/admin/emails", label: "Pending Emails", icon: Send },
   { to: "/admin/quotes", label: "Quote Requests", icon: Inbox },
   { to: "/admin/messages", label: "Messages", icon: Mail },
   { to: "/admin/subscribers", label: "Subscribers", icon: Users },
