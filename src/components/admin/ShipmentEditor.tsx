@@ -106,6 +106,24 @@ export function ShipmentEditor({
         const { data, error } = await supabase.from("shipments").insert({ ...s }).select("id").single();
         if (error) throw error;
         id = data.id;
+        // Auto-generate a notification draft for the receiver (admin must approve to send)
+        if (s.receiver_email && /.+@.+\..+/.test(s.receiver_email)) {
+          const etaStr = s.eta ? new Date(s.eta).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }) : "";
+          const body = [
+            `Your shipment has been registered with Worldwide Cargo Transit and is being prepared for transit.`,
+            `Tracking number: ${s.tracking_number}\nRoute: ${s.origin} → ${s.destination}${etaStr ? `\nEstimated arrival: ${etaStr}` : ""}${s.service_type ? `\nService: ${s.service_type}` : ""}`,
+            `You can track your shipment in real time using the link below. Our team is available 24/7 — reply to this email or call +202-968-9946 for any questions.`,
+            `Thank you for choosing Worldwide Cargo Transit.`,
+          ].join("\n\n");
+          await supabase.from("shipment_email_drafts").insert({
+            shipment_id: id!,
+            recipient_email: s.receiver_email,
+            recipient_name: s.receiver_name,
+            subject: `Shipment ${s.tracking_number} — Worldwide Cargo Transit`,
+            body,
+            status: "pending",
+          });
+        }
       }
       // events
       for (const e of events) {
