@@ -26,6 +26,7 @@ import { Route as AdminShipmentsRouteImport } from './routes/admin.shipments'
 import { Route as AdminQuotesRouteImport } from './routes/admin.quotes'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminInvoicesRouteImport } from './routes/admin.invoices'
+import { Route as AdminEmailsRouteImport } from './routes/admin.emails'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -116,6 +117,11 @@ const AdminInvoicesRoute = AdminInvoicesRouteImport.update({
   path: '/invoices',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminEmailsRoute = AdminEmailsRouteImport.update({
+  id: '/emails',
+  path: '/emails',
+  getParentRoute: () => AdminRoute,
+} as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
@@ -150,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tracking': typeof TrackingRouteWithChildren
+  '/admin/emails': typeof AdminEmailsRoute
   '/admin/invoices': typeof AdminInvoicesRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/quotes': typeof AdminQuotesRoute
@@ -172,6 +179,7 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tracking': typeof TrackingRouteWithChildren
+  '/admin/emails': typeof AdminEmailsRoute
   '/admin/invoices': typeof AdminInvoicesRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/quotes': typeof AdminQuotesRoute
@@ -196,6 +204,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/tracking': typeof TrackingRouteWithChildren
+  '/admin/emails': typeof AdminEmailsRoute
   '/admin/invoices': typeof AdminInvoicesRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/quotes': typeof AdminQuotesRoute
@@ -221,6 +230,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/tracking'
+    | '/admin/emails'
     | '/admin/invoices'
     | '/admin/messages'
     | '/admin/quotes'
@@ -243,6 +253,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/tracking'
+    | '/admin/emails'
     | '/admin/invoices'
     | '/admin/messages'
     | '/admin/quotes'
@@ -266,6 +277,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/tracking'
+    | '/admin/emails'
     | '/admin/invoices'
     | '/admin/messages'
     | '/admin/quotes'
@@ -418,6 +430,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminInvoicesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/emails': {
+      id: '/admin/emails'
+      path: '/emails'
+      fullPath: '/admin/emails'
+      preLoaderRoute: typeof AdminEmailsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
       path: '/lovable/email/suppression'
@@ -450,6 +469,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminEmailsRoute: typeof AdminEmailsRoute
   AdminInvoicesRoute: typeof AdminInvoicesRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
   AdminQuotesRoute: typeof AdminQuotesRoute
@@ -459,6 +479,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminEmailsRoute: AdminEmailsRoute,
   AdminInvoicesRoute: AdminInvoicesRoute,
   AdminMessagesRoute: AdminMessagesRoute,
   AdminQuotesRoute: AdminQuotesRoute,
