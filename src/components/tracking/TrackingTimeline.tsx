@@ -1,4 +1,4 @@
-import { Check, Truck, FileCheck2, Package, AlertTriangle } from "lucide-react";
+import { Check, Truck, FileCheck2, Package, AlertTriangle, PauseCircle } from "lucide-react";
 import type { ShipmentStatus } from "@/lib/brand";
 import { STATUS_LABEL } from "@/lib/brand";
 
@@ -6,6 +6,7 @@ const ICONS: Record<ShipmentStatus, typeof Check> = {
   picked_up: Package,
   in_transit: Truck,
   at_customs: FileCheck2,
+  on_hold: PauseCircle,
   delivered: Check,
   exception: AlertTriangle,
 };
