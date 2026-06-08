@@ -348,6 +348,7 @@ export type Database = {
         | "at_customs"
         | "delivered"
         | "exception"
+        | "on_hold"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -482,6 +483,7 @@ export const Constants = {
         "at_customs",
         "delivered",
         "exception",
+        "on_hold",
       ],
     },
   },

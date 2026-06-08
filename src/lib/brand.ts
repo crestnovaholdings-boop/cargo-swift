@@ -13,6 +13,7 @@ export type ShipmentStatus =
   | "picked_up"
   | "in_transit"
   | "at_customs"
+  | "on_hold"
   | "delivered"
   | "exception";
 
@@ -20,6 +21,7 @@ export const STATUS_LABEL: Record<ShipmentStatus, string> = {
   picked_up: "Picked Up",
   in_transit: "In Transit",
   at_customs: "At Customs",
+  on_hold: "On Hold",
   delivered: "Delivered",
   exception: "Exception",
 };
@@ -28,6 +30,7 @@ export const STATUS_CLASS: Record<ShipmentStatus, string> = {
   picked_up: "status-picked_up",
   in_transit: "status-in_transit",
   at_customs: "status-at_customs",
+  on_hold: "status-on_hold",
   delivered: "status-delivered",
   exception: "status-exception",
 };

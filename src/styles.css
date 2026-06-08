@@ -230,6 +230,7 @@
 .status-picked_up { background: oklch(0.94 0.02 220); color: oklch(0.30 0.04 220); }
 .status-in_transit { background: oklch(0.93 0.04 200); color: oklch(0.30 0.05 210); }
 .status-at_customs { background: oklch(0.94 0.10 85); color: oklch(0.40 0.13 70); }
+.status-on_hold { background: oklch(0.92 0.04 50); color: oklch(0.40 0.08 50); }
 .status-delivered { background: oklch(0.93 0.10 165); color: oklch(0.38 0.13 165); }
 .status-exception { background: oklch(0.94 0.06 25); color: oklch(0.45 0.18 27); }
 

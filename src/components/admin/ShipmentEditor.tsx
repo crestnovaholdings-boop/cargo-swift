@@ -34,7 +34,7 @@ type Evt = {
   _dirty?: boolean;
 };
 
-const STATUSES: ShipmentStatus[] = ["picked_up", "in_transit", "at_customs", "delivered", "exception"];
+const STATUSES: ShipmentStatus[] = ["picked_up", "in_transit", "at_customs", "on_hold", "delivered", "exception"];
 
 const empty = (): Shipment => ({
   tracking_number: generateTrackingNumber(),
