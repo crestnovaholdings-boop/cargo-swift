@@ -274,6 +274,57 @@ export type Database = {
         }
         Relationships: []
       }
+      shipment_email_drafts: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          body: string
+          created_at: string
+          error_message: string | null
+          id: string
+          message_id: string | null
+          recipient_email: string
+          recipient_name: string | null
+          sent_at: string | null
+          shipment_id: string
+          status: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          body: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          message_id?: string | null
+          recipient_email: string
+          recipient_name?: string | null
+          sent_at?: string | null
+          shipment_id: string
+          status?: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          body?: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          message_id?: string | null
+          recipient_email?: string
+          recipient_name?: string | null
+          sent_at?: string | null
+          shipment_id?: string
+          status?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       shipment_events: {
         Row: {
           created_at: string
