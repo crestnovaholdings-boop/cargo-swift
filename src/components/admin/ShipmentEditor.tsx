@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { STATUS_LABEL, generateTrackingNumber, type ShipmentStatus } from "@/lib/brand";
 import { toast } from "sonner";
 import { Plus, Trash2, Calendar, MapPin } from "lucide-react";
+import { geocodeAddress } from "@/lib/geocode";
 
 const MapPicker = lazy(() => import("./MapPicker").then((m) => ({ default: m.MapPicker })));
 
@@ -18,6 +19,8 @@ type Shipment = {
   sender_name: string; sender_address: string | null; sender_phone: string | null; sender_email: string | null;
   receiver_name: string; receiver_address: string | null; receiver_phone: string | null; receiver_email: string | null;
   origin: string; destination: string;
+  origin_lat: number | null; origin_lng: number | null;
+  destination_lat: number | null; destination_lng: number | null;
   status: ShipmentStatus;
   eta: string | null; weight_kg: number | null; dimensions: string | null; service_type: string | null;
   declared_value: number | null; notes: string | null;
@@ -41,6 +44,7 @@ const empty = (): Shipment => ({
   sender_name: "", sender_address: "", sender_phone: "", sender_email: "",
   receiver_name: "", receiver_address: "", receiver_phone: "", receiver_email: "",
   origin: "", destination: "",
+  origin_lat: null, origin_lng: null, destination_lat: null, destination_lng: null,
   status: "picked_up",
   eta: null, weight_kg: null, dimensions: "", service_type: "Standard",
   declared_value: null, notes: "",
@@ -98,28 +102,39 @@ export function ShipmentEditor({
     }
     setSaving(true);
     try {
+      // Auto-geocode origin/destination so the live map can plot the sender & receiver pins
+      const next = { ...s };
+      if (next.origin && (next.origin_lat == null || next.origin_lng == null)) {
+        const p = await geocodeAddress(next.sender_address ? `${next.origin}, ${next.sender_address}` : next.origin);
+        if (p) { next.origin_lat = p.lat; next.origin_lng = p.lng; }
+      }
+      if (next.destination && (next.destination_lat == null || next.destination_lng == null)) {
+        const p = await geocodeAddress(next.receiver_address ? `${next.destination}, ${next.receiver_address}` : next.destination);
+        if (p) { next.destination_lat = p.lat; next.destination_lng = p.lng; }
+      }
+      setS(next);
       let id = s.id;
       if (id) {
-        const { error } = await supabase.from("shipments").update({ ...s }).eq("id", id);
+        const { error } = await supabase.from("shipments").update({ ...next }).eq("id", id);
         if (error) throw error;
       } else {
-        const { data, error } = await supabase.from("shipments").insert({ ...s }).select("id").single();
+        const { data, error } = await supabase.from("shipments").insert({ ...next }).select("id").single();
         if (error) throw error;
         id = data.id;
         // Auto-generate a notification draft for the receiver (admin must approve to send)
-        if (s.receiver_email && /.+@.+\..+/.test(s.receiver_email)) {
-          const etaStr = s.eta ? new Date(s.eta).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }) : "";
+        if (next.receiver_email && /.+@.+\..+/.test(next.receiver_email)) {
+          const etaStr = next.eta ? new Date(next.eta).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }) : "";
           const body = [
             `Your shipment has been registered with Worldwide Cargo Transit and is being prepared for transit.`,
-            `Tracking number: ${s.tracking_number}\nRoute: ${s.origin} → ${s.destination}${etaStr ? `\nEstimated arrival: ${etaStr}` : ""}${s.service_type ? `\nService: ${s.service_type}` : ""}`,
+            `Tracking number: ${next.tracking_number}\nRoute: ${next.origin} → ${next.destination}${etaStr ? `\nEstimated arrival: ${etaStr}` : ""}${next.service_type ? `\nService: ${next.service_type}` : ""}`,
             `You can track your shipment in real time using the link below. Our team is available 24/7 — reply to this email or call +202-968-9946 for any questions.`,
             `Thank you for choosing Worldwide Cargo Transit.`,
           ].join("\n\n");
           await supabase.from("shipment_email_drafts").insert({
             shipment_id: id!,
-            recipient_email: s.receiver_email,
-            recipient_name: s.receiver_name,
-            subject: `Shipment ${s.tracking_number} — Worldwide Cargo Transit`,
+            recipient_email: next.receiver_email,
+            recipient_name: next.receiver_name,
+            subject: `Shipment ${next.tracking_number} — Worldwide Cargo Transit`,
             body,
             status: "pending",
           });
