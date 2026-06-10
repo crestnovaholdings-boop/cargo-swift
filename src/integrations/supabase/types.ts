@@ -375,11 +375,15 @@ export type Database = {
           created_by: string | null
           declared_value: number | null
           destination: string
+          destination_lat: number | null
+          destination_lng: number | null
           dimensions: string | null
           eta: string | null
           id: string
           notes: string | null
           origin: string
+          origin_lat: number | null
+          origin_lng: number | null
           receiver_address: string | null
           receiver_email: string | null
           receiver_name: string
@@ -399,11 +403,15 @@ export type Database = {
           created_by?: string | null
           declared_value?: number | null
           destination: string
+          destination_lat?: number | null
+          destination_lng?: number | null
           dimensions?: string | null
           eta?: string | null
           id?: string
           notes?: string | null
           origin: string
+          origin_lat?: number | null
+          origin_lng?: number | null
           receiver_address?: string | null
           receiver_email?: string | null
           receiver_name: string
@@ -423,11 +431,15 @@ export type Database = {
           created_by?: string | null
           declared_value?: number | null
           destination?: string
+          destination_lat?: number | null
+          destination_lng?: number | null
           dimensions?: string | null
           eta?: string | null
           id?: string
           notes?: string | null
           origin?: string
+          origin_lat?: number | null
+          origin_lng?: number | null
           receiver_address?: string | null
           receiver_email?: string | null
           receiver_name?: string

@@ -14,6 +14,8 @@ export type Shipment = {
   sender_name: string; sender_address: string | null; sender_phone: string | null; sender_email: string | null;
   receiver_name: string; receiver_address: string | null; receiver_phone: string | null; receiver_email: string | null;
   origin: string; destination: string;
+  origin_lat: number | null; origin_lng: number | null;
+  destination_lat: number | null; destination_lng: number | null;
   status: ShipmentStatus;
   eta: string | null; weight_kg: number | null; dimensions: string | null; service_type: string | null;
 };
@@ -71,7 +73,7 @@ export function ShipmentDetails({ shipment, events: initialEvents }: { shipment:
       </div>
 
       <Suspense fallback={<div className="grid h-[420px] place-items-center rounded-2xl bg-muted">Loading map…</div>}>
-        <LiveTrackingMap events={events} />
+        <LiveTrackingMap events={events} shipment={shipState} />
       </Suspense>
 
       <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
