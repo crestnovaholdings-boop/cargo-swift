@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { mirrorToInbox } from "@/lib/formsubmit";
 
 export function Footer() {
   const [email, setEmail] = useState("");
@@ -20,6 +21,7 @@ export function Footer() {
     if (error && !String(error.message).toLowerCase().includes("duplicate") && !String(error.message).toLowerCase().includes("unique")) {
       toast.error("Something went wrong");
     } else {
+      await mirrorToInbox("New Newsletter Subscriber — WWCT", { email });
       toast.success("Subscribed! Watch your inbox.");
       setEmail("");
     }

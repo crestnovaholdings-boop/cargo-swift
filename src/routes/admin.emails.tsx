@@ -9,8 +9,9 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Mail, Send, X, CheckCircle2, Clock, AlertCircle } from "lucide-react";
-import { STATUS_LABEL, type ShipmentStatus } from "@/lib/brand";
+import { Mail, ExternalLink, X, CheckCircle2, Clock, AlertCircle } from "lucide-react";
+import type { ShipmentStatus } from "@/lib/brand";
+import { mirrorToInbox } from "@/lib/formsubmit";
 
 export const Route = createFileRoute("/admin/emails")({ component: EmailsPage });
 
@@ -91,73 +92,43 @@ function EmailsPage() {
     else { toast.success("Email rejected"); setEditing(null); load(); }
   };
 
-  const approveAndSend = async (d: Draft) => {
+  const validDraft = (d: Draft) => {
     if (!d.subject.trim() || !d.body.trim() || !d.recipient_email.trim()) {
       toast.error("Subject, body and recipient are required");
-      return;
+      return false;
     }
+    return true;
+  };
+
+  // Customer emails are sent from the admin's own mail app: FormSubmit can only
+  // deliver to the company inbox, so this opens a pre-filled message instead.
+  const openInMailApp = async (d: Draft) => {
+    if (!validDraft(d) || !(await saveDraft(d))) return;
+    const ship = shipments[d.shipment_id];
+    const trackingUrl = `${window.location.origin}/tracking/${ship?.tracking_number ?? ""}`;
+    const text = `${d.body}\n\nTrack your shipment: ${trackingUrl}`;
+    window.location.href = `mailto:${encodeURIComponent(d.recipient_email)}?subject=${encodeURIComponent(d.subject)}&body=${encodeURIComponent(text)}`;
+  };
+
+  // Only recorded after the admin confirms the email actually went out.
+  const markSent = async (d: Draft) => {
+    if (!validDraft(d)) return;
     setSending(true);
     try {
-      const ok = await saveDraft(d);
-      if (!ok) return;
-
-      const ship = shipments[d.shipment_id];
-      const etaStr = ship?.eta
-        ? new Date(ship.eta).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })
-        : "";
-      const trackingUrl = `${window.location.origin}/tracking/${ship?.tracking_number ?? ""}`;
-
-      const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch("/lovable/email/transactional/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.access_token ?? ""}`,
-        },
-        body: JSON.stringify({
-          templateName: "shipment-notification",
-          recipientEmail: d.recipient_email,
-          idempotencyKey: `shipment-draft-${d.id}`,
-          templateData: {
-            subject: d.subject,
-            recipientName: d.recipient_name ?? "",
-            trackingNumber: ship?.tracking_number ?? "",
-            origin: ship?.origin ?? "",
-            destination: ship?.destination ?? "",
-            eta: etaStr,
-            serviceType: ship?.service_type ?? "",
-            statusLabel: ship ? STATUS_LABEL[ship.status] : "",
-            message: d.body,
-            trackingUrl,
-          },
-        }),
-      });
-
-      if (!res.ok) {
-        const txt = await res.text();
-        await supabase
-          .from("shipment_email_drafts")
-          .update({ status: "pending", error_message: txt.slice(0, 500) })
-          .eq("id", d.id);
-        toast.error("Send failed: " + txt.slice(0, 120));
-        load();
-        return;
-      }
-
-      await supabase
+      if (!(await saveDraft(d))) return;
+      const now = new Date().toISOString();
+      const { error } = await supabase
         .from("shipment_email_drafts")
-        .update({
-          status: "sent",
-          sent_at: new Date().toISOString(),
-          approved_at: new Date().toISOString(),
-          error_message: null,
-        })
+        .update({ status: "sent", sent_at: now, approved_at: now, error_message: null })
         .eq("id", d.id);
-      toast.success("Email queued for delivery");
+      if (error) { toast.error(error.message); return; }
+      await mirrorToInbox(`Shipment email sent: ${shipments[d.shipment_id]?.tracking_number ?? ""}`, {
+        recipient: d.recipient_email,
+        subject: d.subject,
+      });
+      toast.success("Marked as sent");
       setEditing(null);
       load();
-    } catch (err: any) {
-      toast.error(err.message ?? "Send failed");
     } finally {
       setSending(false);
     }
@@ -274,7 +245,7 @@ function EmailsPage() {
                   onChange={(e) => setEditing({ ...editing, body: e.target.value })}
                 />
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Plain text — separate paragraphs with a blank line. Tracking details and the tracking button are added automatically from the shipment.
+                  Plain text — separate paragraphs with a blank line. A tracking link is added to the end when you open the email in your mail app.
                 </p>
               </div>
             </div>
@@ -285,12 +256,15 @@ function EmailsPage() {
                 <Button variant="outline" onClick={() => editing && reject(editing)} disabled={sending}>
                   <X className="h-4 w-4" /> Reject
                 </Button>
+                <Button variant="outline" onClick={() => editing && openInMailApp(editing)} disabled={sending}>
+                  <ExternalLink className="h-4 w-4" /> Open in mail app
+                </Button>
                 <Button
-                  onClick={() => editing && approveAndSend(editing)}
+                  onClick={() => editing && markSent(editing)}
                   disabled={sending}
                   className="bg-accent text-accent-foreground hover:bg-accent/90"
                 >
-                  <Send className="h-4 w-4" /> {sending ? "Sending…" : "Approve & Send"}
+                  <CheckCircle2 className="h-4 w-4" /> {sending ? "Saving…" : "Mark as sent"}
                 </Button>
               </>
             ) : (

@@ -10,6 +10,7 @@ import { STATUS_LABEL, generateTrackingNumber, type ShipmentStatus } from "@/lib
 import { toast } from "sonner";
 import { Plus, Trash2, Calendar, MapPin } from "lucide-react";
 import { geocodeAddress } from "@/lib/geocode";
+import { mirrorToInbox } from "@/lib/formsubmit";
 
 const MapPicker = lazy(() => import("./MapPicker").then((m) => ({ default: m.MapPicker })));
 
@@ -130,13 +131,20 @@ export function ShipmentEditor({
             `You can track your shipment in real time using the link below. Our team is available 24/7 — reply to this email or call +202-968-9946 for any questions.`,
             `Thank you for choosing Worldwide Cargo Transit.`,
           ].join("\n\n");
+          const subject = `Shipment ${next.tracking_number} — Worldwide Cargo Transit`;
           await supabase.from("shipment_email_drafts").insert({
             shipment_id: id!,
             recipient_email: next.receiver_email,
             recipient_name: next.receiver_name,
-            subject: `Shipment ${next.tracking_number} — Worldwide Cargo Transit`,
+            subject,
             body,
             status: "pending",
+          });
+          await mirrorToInbox(`Shipment email drafted: ${next.tracking_number}`, {
+            tracking_number: next.tracking_number,
+            receiver_name: next.receiver_name,
+            receiver_email: next.receiver_email,
+            subject,
           });
         }
       }
